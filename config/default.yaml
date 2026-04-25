@@ -1,0 +1,32 @@
+# Konfigurasi Default PurpleScan
+scan:
+  # Ports yang akan discan oleh Nmap (fokus web)
+  default_ports: "80,443,8080,8443,8000-9000,3000-3100"
+  
+  # Timing Nmap (-T0 sampai -T5)
+  nmap_timing: "T3"
+  
+  # Argument tambahan Nmap
+  nmap_args: "-sV -O --script=http-title"
+  
+  # Nikto timeout per target (detik)
+  nikto_timeout: 600
+
+reporting:
+  # Folder output
+  output_dir: "output"
+  report_dir: "reports"
+  
+  # Format report yang dihasilkan
+  formats: ["txt", "json"]
+
+evasion:
+  enabled: false
+  # Delay antar request (detik) jika evasion aktif
+  delay_between_targets: 1.5
+  # Random user-agent untuk Nikto
+  randomize_user_agent: true
+
+general:
+  version: "0.1.0"
+  description: "PurpleScan - Nmap + Nikto untuk Purple Team"
