@@ -1,0 +1,18 @@
+scan:
+  default_ports: "80,443,8080,8443"
+  nmap_timing: "T1"                    # Sangat pelan
+  nikto_timeout: 720
+  nikto_tuning: "x"
+  max_parallel_workers: 3              # Kurangi parallel agar lebih stealth
+
+reporting:
+  output_dir: "output"
+  report_dir: "reports"
+
+evasion:
+  enabled: true
+  delay_between_targets: 3.0           # Delay lebih besar
+
+general:
+  version: "0.3.0"
+  name: "PurpleScan - Stealth Profile (Purple Team)"

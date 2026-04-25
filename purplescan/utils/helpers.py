@@ -11,10 +11,10 @@ from typing import List, Union
 
 def validate_target(target: str) -> bool:
     """Validasi target IP, hostname, atau CIDR"""
-    if not target:
+    if not target or not isinstance(target, str):
         return False
     
-    # Cek apakah CIDR
+    # Cek CIDR
     try:
         ipaddress.ip_network(target, strict=False)
         return True
@@ -40,7 +40,6 @@ def create_output_dirs(base_dir: str = "output") -> Path:
     output_path = Path(base_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
-    # Buat subfolder
     (output_path / "nmap").mkdir(exist_ok=True)
     (output_path / "nikto").mkdir(exist_ok=True)
     
@@ -48,19 +47,18 @@ def create_output_dirs(base_dir: str = "output") -> Path:
 
 
 def get_web_url(host: str, port: int, service_name: str) -> str:
-    """Generate URL web berdasarkan port dan service"""
-    if port in [443, 8443] or "https" in service_name.lower():
+    """Generate URL web berdasarkan port"""
+    if port in [443, 8443] or 'https' in service_name.lower():
         return f"https://{host}:{port}"
-    else:
-        return f"http://{host}:{port}"
+    return f"http://{host}:{port}"
 
 
 def print_banner():
     """Tampilkan banner PurpleScan"""
-    banner = """
-    ╔══════════════════════════════════════════════╗
-    ║              PURPLESCAN v0.1                 ║
-    ║     Nmap + Nikto for Purple Team             ║
-    ╚══════════════════════════════════════════════╝
+    banner = r"""
+    ╔══════════════════════════════════════════════════════════════╗
+    ║                    PURPLESCAN v0.2                           ║
+    ║           Nmap + Nikto for Purple Team                       ║
+    ╚══════════════════════════════════════════════════════════════╝
     """
     print(banner)

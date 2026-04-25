@@ -12,10 +12,10 @@ class PurpleScanCore:
     def __init__(self):
         self.chainer = ScanChainer()
 
-    def start_scan(self, target: str):
+    def start_scan(self, target: str, enable_os: bool = False):
         """Mulai proses scanning"""
         try:
-            self.chainer.run_full_scan(target)
+            self.chainer.run_full_scan(target=target, enable_os=enable_os)
         except KeyboardInterrupt:
             console.print("\n[bold red]Scan dibatalkan oleh user.[/bold red]")
         except Exception as e:

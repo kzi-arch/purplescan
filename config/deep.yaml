@@ -1,0 +1,17 @@
+scan:
+  default_ports: "80,443,8080,8443,8000-9999,3000-3100"
+  nmap_timing: "T2"                    # Lebih teliti
+  nikto_timeout: 900
+  nikto_tuning: "x"
+  max_parallel_workers: 4
+
+reporting:
+  output_dir: "output"
+  report_dir: "reports"
+
+evasion:
+  enabled: false
+
+general:
+  version: "0.3.0"
+  name: "PurpleScan - Deep Profile"
