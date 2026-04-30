@@ -8,6 +8,8 @@ from pathlib import Path
 from rich.console import Console
 from typing import Dict
 import asyncio
+import time
+from .nuclei_scanner import NucleiScanner
 
 console = Console()
 
@@ -53,6 +55,18 @@ class NiktoScanner:
             else:
                 console.print(f"[yellow]Nikto keluar dengan kode {process.returncode}[/yellow]")
                 return False
+
+            # Tahap 4: Nuclei Scan (jika diaktifkan)
+            if config.get("nuclei.enabled", True):
+                web_urls = [web['url'] for web in web_targets]
+                self.nuclei_scanner.scan(web_urls)
+
+            elapsed = time.time() - start_time
+            console.print(f"[bold cyan]Membuat laporan hasil scan...[/bold cyan]")
+            self.reporter.generate_summary(target, web_targets, elapsed)
+
+            console.print(f"\n[bold green]✅ Scan lengkap selesai dalam {elapsed:.2f} detik.[/bold green]")
+            console.print(f"[bold]Hasil ada di:[/bold] reports/ dan output/")
                 
         except Exception as e:
             console.print(f"[red]Error Nikto pada {url}: {e}[/red]")

@@ -15,6 +15,8 @@ from .nikto_scanner import NiktoScanner
 from ..utils.helpers import create_output_dirs, print_banner
 from ..reporter.report_generator import ReportGenerator
 from ..config import config
+from .nuclei_scanner import NucleiScanner
+from .ffuf_scanner import FfufScanner
 
 console = Console()
 
@@ -24,6 +26,8 @@ class ScanChainer:
         self.nmap_scanner = NmapScanner()
         self.nikto_scanner = NiktoScanner(self.output_dir)
         self.reporter = ReportGenerator(self.output_dir)
+        self.nuclei_scanner = NucleiScanner(self.output_dir)
+        self.ffuf_scanner = FfufScanner(self.output_dir)
         self.max_workers = 5   # Maksimal parallel Nikto (bisa di-config nanti)
 
     def run_full_scan(self, target: str, enable_os: bool = False) -> None:
@@ -68,6 +72,16 @@ class ScanChainer:
 
             console.print(f"\n[bold green]✅ Scan selesai dalam {elapsed:.2f} detik.[/bold green]")
             console.print(f"[bold]Semua hasil & report ada di folder:[/bold] reports/")
+
+                        # Tahap 5: ffuf Directory Brute-Force (jika diaktifkan)
+        # Tahap 5: ffuf Directory Brute-Force (jika diaktifkan)
+            if config.get("ffuf.enabled", True) and web_targets:
+                console.print("[bold magenta]Memulai Directory Brute-Force dengan ffuf...[/bold magenta]")
+                for web in web_targets:
+                    self.ffuf_scanner.scan(web['url'])
+                    # Delay kecil antar target jika stealth mode
+                    if config.get("evasion.enabled", False):
+                        time.sleep(2)
 
         except Exception as e:
             console.print(f"[bold red]❌ Error selama scanning: {e}[/bold red]")
