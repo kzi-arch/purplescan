@@ -2,7 +2,7 @@ scan:
   default_ports: "80,443,8080,8443,8000-9000"
   nmap_timing: "T3"
   nikto_timeout: 600
-  max_parallel_workers: 5
+  max_parallel_workers: 8
 
 nuclei:
   enabled: true
@@ -12,12 +12,14 @@ nuclei:
 
 ffuf:
   enabled: true
-  wordlist: /usr/share/seclists/Discovery/Web-Content/common.txt"     # ganti jika punya wordlist lain
-  threads: 50
+  wordlists: 
+    - "/usr/share/seclists/Discovery/Web-Content/common.txt"           # Paling umum
+    - "/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt"
+  threads: 60
   timeout: 600
-  extensions: "php,asp,aspx,html,txt,backup,bak,old"   # ekstensi yang dicari
-  max_time_per_target: 300                              # batas waktu per target (detik)
-  follow_redirect: true                  # kosong = default, atau path spesifik
+  extensions: "php,asp,aspx,html,txt,backup,bak,old,zip,sql,env,config,js,json,xml"
+  max_time_per_target: 300
+  follow_redirect: true         # kosong = default, atau path spesifik
 
 reporting:
   output_dir: "output"

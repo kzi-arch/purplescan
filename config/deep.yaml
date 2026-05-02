@@ -1,9 +1,9 @@
 scan:
-  default_ports: "80,443,8080,8443,8000-9999,3000-3100"
-  nmap_timing: "T2"                    # Lebih teliti
+  default_ports: "80,443,8080,8443,8000-9999,3000-3100,5000-5100,9000-9100"
+  nmap_timing: "T2"
   nikto_timeout: 900
   nikto_tuning: "x"
-  max_parallel_workers: 4
+  max_parallel_workers: 6
 
 reporting:
   output_dir: "output"
@@ -12,6 +12,24 @@ reporting:
 evasion:
   enabled: false
 
+nuclei:
+  enabled: true
+  severity: "critical,high,medium"
+  rate_limit: 100
+  timeout: 900
+
+ffuf:
+  enabled: true
+  wordlists: 
+    - "/usr/share/seclists/Discovery/Web-Content/common.txt"           # Paling umum
+    - "/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt"
+  threads: 40
+  timeout: 600
+  max_time_per_target: 240          # Batasi 4 menit per target
+  extensions: "php,asp,aspx,html,txt,backup,bak"
+  follow_redirect: true
+
 general:
-  version: "0.3.0"
-  name: "PurpleScan - Deep Profile"
+  version: "0.5.0"
+  name: "PurpleScan - Deep Profile (Seclists)"
+  description: "Deep scan dengan wordlist lengkap dari Seclists BlackArch"

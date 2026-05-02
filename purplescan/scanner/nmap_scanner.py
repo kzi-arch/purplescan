@@ -78,4 +78,5 @@ def extract_web_services(nm_result) -> List[Dict]:
                         'version': f"{port_data.get('product', '')} {port_data.get('version', '')}".strip()
                     })
     
+    console.print(f"[dim]Ditemukan {len(web_targets)} web service dari Nmap[/dim]")
     return web_targets

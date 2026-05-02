@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Core module - Entry point logic utama PurpleScan
+Core Logic PurpleScan
 """
 
 from .scanner.chainer import ScanChainer
@@ -13,7 +13,6 @@ class PurpleScanCore:
         self.chainer = ScanChainer()
 
     def start_scan(self, target: str, enable_os: bool = False):
-        """Mulai proses scanning"""
         try:
             self.chainer.run_full_scan(target=target, enable_os=enable_os)
         except KeyboardInterrupt:

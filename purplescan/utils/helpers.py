@@ -35,15 +35,27 @@ def validate_target(target: str) -> bool:
     return False
 
 
-def create_output_dirs(base_dir: str = "output") -> Path:
-    """Buat folder output jika belum ada"""
-    output_path = Path(base_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
+def create_output_dirs(base_dir: str = "output", clean: bool = True) -> Path:
+    """Buat folder output, dengan opsi hapus isi lama"""
+    base_path = Path(base_dir).resolve()
     
-    (output_path / "nmap").mkdir(exist_ok=True)
-    (output_path / "nikto").mkdir(exist_ok=True)
+    if clean and base_path.exists():
+        # Hapus isi folder lama (tapi biarkan folder tetap ada)
+        for item in base_path.iterdir():
+            if item.is_dir():
+                import shutil
+                shutil.rmtree(item, ignore_errors=True)
+            else:
+                item.unlink(missing_ok=True)
     
-    return output_path
+    base_path.mkdir(parents=True, exist_ok=True, mode=0o755)
+    
+    # Buat subfolder
+    subfolders = ["nmap", "nikto", "nuclei", "ffuf"]
+    for folder in subfolders:
+        (base_path / folder).mkdir(parents=True, exist_ok=True, mode=0o755)
+    
+    return base_path
 
 
 def get_web_url(host: str, port: int, service_name: str) -> str:
@@ -57,7 +69,7 @@ def print_banner():
     """Tampilkan banner PurpleScan"""
     banner = r"""
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    PURPLESCAN v0.2                           ║
+    ║                    PURPLESCAN v0.5                           ║
     ║           Nmap + Nikto for Purple Team                       ║
     ╚══════════════════════════════════════════════════════════════╝
     """
